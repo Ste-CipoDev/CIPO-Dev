@@ -178,7 +178,9 @@ Per azzerare la duplicazione delle regole tra editor diversi, mantieni i file or
 - **Uso manuale via Git:**
   Clona o copia `skills/cipo-dev/SKILL.md` dentro `$HOME/.gemini/config/skills/cipo-dev/SKILL.md` (o `~/.claude/skills/cipo-dev/`).
 
-> 💡 **Template pronti all'uso:** All'interno della cartella [`templates/`](templates/) di questo repository trovi i file di configurazione pre-compilati da copiare direttamente nella root del tuo progetto (`CLAUDE.md`, `.cursorrules`, `.windsurfrules`, `.aider.conf.yml`, `EIGENT.md`).
+> 💡 **Template pronti all'uso:** All'interno della cartella [`templates/`](templates/) di questo repository trovi il kit completo pronto da copiare nei tuoi progetti:
+> - **Adapter per Agenti AI:** [`CLAUDE.md`](templates/CLAUDE.md), [`.cursorrules`](templates/.cursorrules), [`.windsurfrules`](templates/.windsurfrules), [`.aider.conf.yml`](templates/.aider.conf.yml) e [`EIGENT.md`](templates/EIGENT.md).
+> - **Modelli di Governance:** [`PRD.md`](templates/PRD.md), [`STATUS.md`](templates/STATUS.md), [`MEMORY.md`](templates/MEMORY.md) e [`skills.json`](templates/skills.json) per l'isolamento locale delle skill.
 
 #### B. Claude Code (`CLAUDE.md`)
 Crea o modifica il file `CLAUDE.md` nella root del repository:
