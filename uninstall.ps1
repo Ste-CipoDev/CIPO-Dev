@@ -1,9 +1,10 @@
-# Script di disinstallazione completa di C.I.P.O. per Google Antigravity
+# Script di disinstallazione completa di C.I.P.O. (cipo-dev) per Google Antigravity
 $ErrorActionPreference = "Stop"
 
 Write-Host "Rimozione di C.I.P.O. in corso..." -ForegroundColor Yellow
 
-$destSkills = "$env:USERPROFILE\.gemini\config\skills\cipo"
+$destSkills = "$env:USERPROFILE\.gemini\config\skills\cipo-dev"
+$legacySkills = "$env:USERPROFILE\.gemini\config\skills\cipo"
 $destPlugin = "$env:USERPROFILE\.gemini\config\plugins\cipo"
 
 $rimosso = $false
@@ -11,6 +12,12 @@ $rimosso = $false
 if (Test-Path $destSkills) {
     Remove-Item -Recurse -Force $destSkills
     Write-Host "Rimossa skill globale: $destSkills" -ForegroundColor Cyan
+    $rimosso = $true
+}
+
+if (Test-Path $legacySkills) {
+    Remove-Item -Recurse -Force $legacySkills
+    Write-Host "Rimossa skill legacy: $legacySkills" -ForegroundColor Cyan
     $rimosso = $true
 }
 

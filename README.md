@@ -1,14 +1,14 @@
 # C.I.P.O.
 ### Codificatore Indipendente di Programmazione Operativa
 
-[![Google Antigravity](https://img.shields.io/badge/Google-Antigravity%20Skill-4285F4?style=flat-square&logo=google&logoColor=white)](https://github.com/Ste-CipoDev/C.I.P.O.)
+[![Google Antigravity](https://img.shields.io/badge/Google-Antigravity%20Skill-4285F4?style=flat-square&logo=google&logoColor=white)](https://github.com/Ste-CipoDev/CIPO-Dev)
 [![Role](https://img.shields.io/badge/Role-Senior%20Full--Stack%20Engineer-512BD4?style=flat-square)](README.md)
 [![Scope](https://img.shields.io/badge/Scope-Universal%20Full--Stack-008C45?style=flat-square)](README.md)
 [![Licenza MIT](https://img.shields.io/badge/Licenza-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Lingua Italiano](https://img.shields.io/badge/Lingua-Italiano-008C45?style=flat-square)](README.md)
 [![Commit Italiano](https://img.shields.io/badge/Commit-Italiano%20Only-CD212A?style=flat-square)](README.md)
 
-> **Il mio alter ego operativo alla tastiera**: un Senior Full-Stack Engineer pragmatico e universale per Google Antigravity, progettato per produrre codice snello, ultra-solido e privo di over-engineering su **qualsiasi stack tecnologico** (TypeScript/JavaScript, Python, C#, Go, Rust, SQL, shell/PowerShell, Web, Backend, Frontend, Cloud, Desktop, CLI, Database).
+> **Il mio alter ego operativo alla tastiera**: un Senior Full-Stack Engineer pragmatico e universale per Google Antigravity e agenti AI (identificato tecnicamente come skill `cipo-dev`), progettato per produrre codice snello, ultra-solido e privo di over-engineering su **qualsiasi stack tecnologico** (TypeScript/JavaScript, Python, C#, Go, Rust, SQL, shell/PowerShell, Web, Backend, Frontend, Cloud, Desktop, CLI, Database). Completa in tandem operativo la governance di [CIPO-Method](https://github.com/Ste-CipoDev/CIPO-Method).
 
 ---
 
@@ -143,19 +143,19 @@ C.I.P.O. può essere impiegato in 3 modalità operative complementari:
 ### 1. Installazione Rapida (One-Liner PowerShell)
 Apri una finestra PowerShell ed esegui:
 ```powershell
-irm https://raw.githubusercontent.com/Ste-CipoDev/C.I.P.O./main/install.ps1 | iex
+irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/install.ps1 | iex
 ```
 
 ### 2. Aggiornamento all'Ultima Versione
 Per sincronizzare le ultime migliorie rilasciate sul repository:
 ```powershell
-irm https://raw.githubusercontent.com/Ste-CipoDev/C.I.P.O./main/update.ps1 | iex
+irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/update.ps1 | iex
 ```
 
 ### 3. Disinstallazione Completa
 Se desideri rimuovere C.I.P.O. dal sistema senza lasciare tracce:
 ```powershell
-irm https://raw.githubusercontent.com/Ste-CipoDev/C.I.P.O./main/uninstall.ps1 | iex
+irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/uninstall.ps1 | iex
 ```
 
 ---
@@ -165,4 +165,4 @@ irm https://raw.githubusercontent.com/Ste-CipoDev/C.I.P.O./main/uninstall.ps1 | 
 - **Ideato e sviluppato da**: [Stefano Cipollitti](https://github.com/Ste-CipoDev) ([@Ste-CipoDev](https://github.com/Ste-CipoDev))
 - **Licenza**: [MIT](LICENSE) — Libero e gratuito per qualsiasi utilizzo, sia personale che aziendale.
 
-Se trovi utile C.I.P.O. per i tuoi progetti o desideri proporre miglioramenti, apri una [Issue su GitHub](https://github.com/Ste-CipoDev/C.I.P.O./issues)!
+Se trovi utile C.I.P.O. per i tuoi progetti o desideri proporre miglioramenti, apri una [Issue su GitHub](https://github.com/Ste-CipoDev/CIPO-Dev/issues)!
