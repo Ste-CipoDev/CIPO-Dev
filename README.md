@@ -1,22 +1,22 @@
 # C.I.P.O.
 ### Codificatore Indipendente di Programmazione Operativa
 
-[![Google Antigravity](https://img.shields.io/badge/Google-Antigravity%20Skill-4285F4?style=flat-square&logo=google&logoColor=white)](https://github.com/Ste-CipoDev/CIPO-Dev)
+[![Multi-Agent Ready](https://img.shields.io/badge/AI%20Agents-Antigravity%20|%20Claude%20|%20Cursor%20|%20Windsurf%20|%20Aider%20|%20Eigent-4285F4?style=flat-square)](https://github.com/Ste-CipoDev/CIPO-Dev)
 [![Role](https://img.shields.io/badge/Role-Senior%20Full--Stack%20Engineer-512BD4?style=flat-square)](README.md)
 [![Scope](https://img.shields.io/badge/Scope-Universal%20Full--Stack-008C45?style=flat-square)](README.md)
 [![Licenza MIT](https://img.shields.io/badge/Licenza-MIT-blue.svg?style=flat-square)](LICENSE)
 [![Lingua Italiano](https://img.shields.io/badge/Lingua-Italiano-008C45?style=flat-square)](README.md)
 [![Commit Italiano](https://img.shields.io/badge/Commit-Italiano%20Only-CD212A?style=flat-square)](README.md)
 
-> **Il mio alter ego operativo alla tastiera**: un Senior Full-Stack Engineer pragmatico e universale per Google Antigravity e agenti AI (identificato tecnicamente come skill `cipo-dev`), progettato per produrre codice snello, ultra-solido e privo di over-engineering su **qualsiasi stack tecnologico** (TypeScript/JavaScript, Python, C#, Go, Rust, SQL, shell/PowerShell, Web, Backend, Frontend, Cloud, Desktop, CLI, Database). Completa in tandem operativo la governance di [CIPO-Method](https://github.com/Ste-CipoDev/CIPO-Method).
+> **Il mio alter ego operativo alla tastiera**: un Senior Full-Stack Engineer pragmatico, universale e atopico (identificato tecnicamente come skill `cipo-dev`), progettato per produrre codice snello, ultra-solido e privo di over-engineering su **qualsiasi stack tecnologico** (TypeScript/JavaScript, Python, C#, Go, Rust, SQL, shell/PowerShell, Web, Backend, Frontend, Cloud, Desktop, CLI, Database). Completa in tandem operativo la governance di [CIPO-Method](https://github.com/Ste-CipoDev/CIPO-Method).
 
 ---
 
 ## Proclama di C.I.P.O.
 
-**C.I.P.O. sono io**: il distillato della mia esperienza e del mio modo reale di fare software, tradotto in linee d'azione per il sub-agente di Antigravity.
+**C.I.P.O. sono io**: il distillato della mia esperienza e del mio modo reale di fare software, tradotto in principi operativi direttamente interpretabili da **qualsiasi assistente o agente AI di coding** (Google Antigravity, Claude Code, Cursor, Windsurf, Aider, Eigent e assistenti LLM conversazionali).
 
-Usare C.I.P.O. significa letteralmente **fare pair programming con me**: avere alla tastiera un senior developer che ragiona con la mia stessa testa e non accetta compromessi sulla qualità — un senior engineer sempre a portata di comando nel tuo terminale, pronto a intervenire con autorevolezza su qualsiasi linguaggio o stack.
+Usare C.I.P.O. significa letteralmente **fare pair programming con me**: avere alla tastiera un senior developer che ragiona con la mia stessa testa e non accetta compromessi sulla qualità — un senior engineer sempre a portata di comando nel tuo terminale o editor, pronto a intervenire con autorevolezza su qualsiasi linguaggio o stack.
 
 In C.I.P.O. ho riversato la mia totale intolleranza per l'over-engineering: niente codice cerimoniale, nessuna astrazione prematura, solo soluzioni snelle e deterministiche fatte per reggere la produzione. Codice lineare che qualunque collega può capire e manutenere anche alle tre di notte in emergenza. Niente di meno.
 
@@ -128,15 +128,48 @@ C.I.P.O. programma con disinvoltura su qualsiasi stack. **Esclusivamente quando 
 
 ## Come Interagire con C.I.P.O.
 
-C.I.P.O. può essere impiegato in 3 modalità operative complementari:
+C.I.P.O. può essere impiegato con naturalezza su qualsiasi piattaforma o strumento:
 
-1. **Pair Programming Interattivo**: digita il comando `/cipo` nella chat di Antigravity per iniziare una sessione di sviluppo congiunta. C.I.P.O. ti affiancherà nell'ideazione e stesura del codice, applicando la Scala del Pragmatismo Operativo.
-2. **Sub-Agente Autonomo in Background**: puoi delegargli interi task di implementazione, migrazione o refactoring chiedendo ad Antigravity di eseguire il lavoro in background con il profilo C.I.P.O.
-3. **Revisione Critica del Codice Esistente**: puoi sottoporre a C.I.P.O. file o porzioni di codebase per scovare complessità speculativa, colli di bottiglia prestazionali, toppe temporanee o vulnerabilità di sicurezza.
+1. **Google Antigravity**: come skill installata (`cipo-dev`), richiamabile on-demand o nei workflow di subagent in background.
+2. **Claude Code**: referenziando la regola in `CLAUDE.md`.
+3. **Cursor**: inserendo il puntamento in `.cursorrules`.
+4. **Windsurf**: referenziando la regola in `.windsurfrules`.
+5. **Aider**: caricato in sola lettura via `read: [ _system/rules/cipo-dev.md ]` in `.aider.conf.yml`.
+6. **Eigent**: importato come Agent Skill o referenziato nello Space di workspace.
 
 ---
 
-## Installazione e Gestione del Ciclo di Vita
+## Architettura "Single Source of Truth" & File di Instradamento
+
+In un workspace multimodale, la configurazione raccomandata prevede **un'unica sorgente di verità** per le regole, referenziata da file leggeri di instradamento posti nella root del repository:
+
+```
+[Single Source of Truth: Workspace Root]
+   ├── AGENTS.md                   <-- Governance centrale & Ruolo di Orchestrator
+   └── _system/rules/
+          ├── cipo-dev.md          <-- Principi ingegneristici e scala C.I.P.O.
+          └── cipo-method.md       <-- Metodo CIPO.DEV (PRD, Memoria a 3 piani)
+          ▲
+          │ (puntamento diretto dai file di instradamento)
+   ───────┴─────────────────────────────────────────
+   ├── CLAUDE.md                   --> Istruzioni per Claude Code
+   ├── .cursorrules                --> Istruzioni per Cursor
+   ├── .windsurfrules              --> Istruzioni per Windsurf
+   ├── .aider.conf.yml             --> File in sola lettura per Aider
+   └── EIGENT.md                   --> Guida per lo Space Eigent
+```
+
+### Esempio di file di instradamento (`CLAUDE.md` / `.cursorrules` / `.windsurfrules`)
+```markdown
+Before taking any action, reading files or writing code, you MUST read and strictly adhere to:
+1. AGENTS.md
+2. _system/rules/cipo-dev.md
+3. _system/rules/cipo-method.md
+```
+
+---
+
+## Installazione Globale per Google Antigravity (Skill)
 
 > **Prerequisiti**: È sufficiente disporre di **Google Antigravity** (o CLI `agy`) installato sul sistema e di una console PowerShell (Windows) o Bash (Linux/macOS).
 
