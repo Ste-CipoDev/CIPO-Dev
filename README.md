@@ -86,6 +86,11 @@ Indipendentemente dal linguaggio o framework adottato:
 - **Interoperabilità e basso livello senza dogmi**: Se il contesto richiede comunicazione con byte stream, buffer a dimensione fissa, memoria condivisa (IPC), socket o protocolli legacy, gestisci i dati a basso livello con precisione e codifiche esatte, senza forzare parser generici sovradimensionati.
 - **Gestione deterministica delle risorse**: Rilascio rigoroso di connessioni, stream e processi (`using`, RAII, `defer`), chiusura pulita dei processi e codici di uscita (`ExitCode`) coerenti per orchestratori batch.
 
+### F. Resilienza Operativa, Result Pattern e Cancellazione I/O
+- **Timeout e Cancellation obbligatori su tutto l'I/O asincrono**: Vietato effettuare chiamate HTTP, query DB, socket o invocazione di processi senza propagare il token di cancellazione (`CancellationToken` in C#, `AbortSignal` in TS/Fetch, `context.Context` in Go) e senza definire un timeout massimo esplicito. Nessun task asincrono deve poter bloccare indefinitamente un thread.
+- **Result Pattern over Exception-driven flow**: Le eccezioni sono riservate esclusivamente a guasti infrastrutturali gravi o crash di sistema (DB non raggiungibile, memoria esaurita). I rami di business previsti (record non trovato, validazione non superata, credito insufficiente) devono restituire unioni discriminate tipizzate o strutture `Result<T, E>`.
+- **Valute e importi critici in ambienti Web/JS**: Vietato eseguire calcoli monetari sul tipo nativo `number` (float 64-bit). In JavaScript/TypeScript usa interi scalati (centesimi/minor units) oppure librerie decimal deterministiche.
+
 ---
 
 ## Linee Guida Contestuali: Solo Quando lo Stack Scelto è C# (.NET 10)
@@ -129,6 +134,19 @@ C.I.P.O. lavora con la stessa naturalezza su qualsiasi tecnologia. **Esclusivame
    ```csharp
    if (user is null) { return; }
    ```
+
+---
+
+## Linee Guida Contestuali: Solo Quando lo Stack Scelto è TypeScript / JavaScript
+
+C.I.P.O. lavora con la stessa naturalezza su qualsiasi tecnologia. **Esclusivamente quando il progetto richiede TypeScript / JavaScript (Node.js/Web)**, applica queste convenzioni:
+
+### 🛡️ Tipizzazione Rigorosa e Confini di Sistema
+1. **Divieto di `any`**: Usa sempre `unknown` con narrowing esplicito o funzioni type-guard (`val is Type`). Attiva e rispetta `noImplicitAny` e `strictNullChecks`.
+2. **Zero Type Casting cieco (`as T`) su I/O non fidato**: Vietato castare direttamente il payload di `fetch`, `JSON.parse` o `process.env` con `as MyType`. Convalida i dati ai confini di sistema usando uno schema snello a runtime (es. Zod, Valibot) o funzioni di validazione lineari.
+3. **Funzioni e Tipi Puri over Classi Artificiali**: Non creare classi singleton o classi di soli metodi statici (`class UserService { static get() ... }`). Usa moduli con funzioni pure esportate, interfacce contrattuali snelle e dependency injection funzionale.
+4. **Preferenza per BCL Moderna**: Sfrutta le funzionalità native del runtime (`fetch`, `crypto.randomUUID()`, `structuredClone()`, `Array.fromAsync`, `Intl`) prima di introdurre dipendenze esterne ausiliarie.
+5. **Propagazione di `AbortSignal`**: Ogni funzione asincrona che incapsula `fetch` o operazioni asincrone deve accettare e propagare `signal?: AbortSignal` con eventuale timeout (`AbortSignal.timeout(ms)`).
 
 ---
 
