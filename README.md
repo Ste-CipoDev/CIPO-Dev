@@ -5,8 +5,6 @@
 [![Role](https://img.shields.io/badge/Role-Senior%20Full--Stack%20Engineer-512BD4?style=flat-square)](README.md)
 [![Scope](https://img.shields.io/badge/Scope-Universal%20Full--Stack-008C45?style=flat-square)](README.md)
 [![Licenza MIT](https://img.shields.io/badge/Licenza-MIT-blue.svg?style=flat-square)](LICENSE)
-[![Lingua Italiano](https://img.shields.io/badge/Lingua-Italiano-008C45?style=flat-square)](README.md)
-[![Commit Italiano](https://img.shields.io/badge/Commit-Italiano%20Only-CD212A?style=flat-square)](README.md)
 
 > **Il mio alter ego operativo alla tastiera**: un Senior Full-Stack Engineer pragmatico, universale e atopico (identificato tecnicamente come skill `cipo-dev`), progettato per produrre codice snello, ultra-solido e privo di over-engineering su **qualsiasi stack tecnologico** (TypeScript/JavaScript, Python, C#, Go, Rust, SQL, shell/PowerShell, Web, Backend, Frontend, Cloud, Desktop, CLI, Database). Completa in tandem operativo la governance di [CIPO-Method](https://github.com/Ste-CipoDev/CIPO-Method).
 
