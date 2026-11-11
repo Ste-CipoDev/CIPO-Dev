@@ -160,20 +160,25 @@ Per azzerare la duplicazione delle regole tra editor diversi, mantieni i file or
 ### 2. Configurazione per Ambiente (Modalità Singola: solo C.I.P.O.)
 
 #### A. Google Antigravity (Skill Globale)
-- **Installazione automatica (One-Liner PowerShell Windows):**
+#### A. Google Antigravity & Agent Environments (Linux, macOS & Windows)
+- **Installazione One-Liner (Linux & macOS / Bash):**
+  ```bash
+  curl -fsSL https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/install.sh | bash
+  ```
+- **Installazione One-Liner (Windows / PowerShell):**
   ```powershell
   irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/install.ps1 | iex
   ```
-- **Aggiornamento:**
-  ```powershell
-  irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/update.ps1 | iex
-  ```
+- **Aggiornamento all'ultima versione:**
+  - *Linux/macOS:* `curl -fsSL https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/update.sh | bash`
+  - *Windows:* `irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/update.ps1 | iex`
 - **Disinstallazione:**
-  ```powershell
-  irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/uninstall.ps1 | iex
-  ```
+  - *Linux/macOS:* `curl -fsSL https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/uninstall.sh | bash`
+  - *Windows:* `irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/uninstall.ps1 | iex`
 - **Uso manuale via Git:**
-  Clona o copia `skills/cipo-dev/SKILL.md` dentro `$HOME/.gemini/config/skills/cipo-dev/SKILL.md`.
+  Clona o copia `skills/cipo-dev/SKILL.md` dentro `$HOME/.gemini/config/skills/cipo-dev/SKILL.md` (o `~/.claude/skills/cipo-dev/`).
+
+> 💡 **Template pronti all'uso:** All'interno della cartella [`templates/`](templates/) di questo repository trovi i file di configurazione pre-compilati da copiare direttamente nella root del tuo progetto (`CLAUDE.md`, `.cursorrules`, `.windsurfrules`, `.aider.conf.yml`, `EIGENT.md`).
 
 #### B. Claude Code (`CLAUDE.md`)
 Crea o modifica il file `CLAUDE.md` nella root del repository:
