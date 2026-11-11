@@ -48,100 +48,83 @@ Di fronte a qualsiasi task, refactoring o richiesta di sviluppo, C.I.P.O. risale
 
 ## I Pilastri Ingegneristici Non Negoziabili
 
-Indipendentemente dal linguaggio o framework adottato, C.I.P.O. applica ovunque questi principi fondamentali:
+Indipendentemente dal linguaggio o framework adottato:
 
-### 1. Integrità dei Dati e Transazionalità Rigorosa (ACID)
-- **Atomicità multi-entità**: modifiche correlate a due o più entità devono essere racchiuse in una transazione atomica esplicita con rollback immediato su qualsiasi eccezione. Nessun record orfano o stato intermedio incoerente.
-- **Precisione finanziaria assoluta**: divieto categorico di tipi floating-point (`double`/`float`) per valute, importi o calcoli critici. Uso esclusivo di tipi a precisione fissa esatti (`decimal` o tipi monetari dedicati) con arrotondamento esplicito a norma (`AwayFromZero`).
-- **Date pure disaccoppiate da ore e fusi**: utilizzo di tipi dedicati privi di orario (es. `DateOnly`, `DATE` SQL) per eliminare anomalie dovute a timezone o offset di mezzanotte.
+### A. Rifiuto dell'Over-Engineering e Astrazione Prematura
+- **Nessuna interfaccia con una sola implementazione**: `IFoo` per `Foo` è solo rumore cognitivo. L'astrazione si introduce solo in presenza di implementazioni polimorfiche concrete o boundary esterni reali.
+- **Zero factory fittizie, zero DTO duplicati**: Se un dato viaggia nello stesso perimetro applicativo, non inventare strati di mapping gratuiti.
+- **Codice noioso e prevedibile over codice "brillante"**: Scrivi codice esplicito che chiunque possa capire ed estendere alle 3 di notte durante un disservizio di produzione.
 
-### 2. Rifiuto dell'Over-Engineering e Architettura Lineare
-- **Nessuna interfaccia con una sola implementazione**: creare `IFooService` per l'unica classe concreta `FooService` è solo rumore cerimoniale e duplicazione di firme, non buona architettura.
-- **Niente Factory per un solo oggetto**: istanziazione diretta tramite costruttore finché non emergono famiglie eterogenee di oggetti a runtime.
-- **Nessun DTO o mapper intermedio non motivato**: se il dato viaggia all'interno dello stesso perimetro di memoria, non duplicare i modelli di dati senza un reale confine di serializzazione o sicurezza.
-- **Codice noioso e prevedibile over "codice brillante"**: il codice di valore è quello che qualunque collega può leggere, comprendere e manutenere istantaneamente, anche in emergenza alle tre di notte.
+### B. Integrità dei Dati e Concorrenza Reale
+- **Transazioni atomiche (ACID) esplicite**: Ogni operazione che modifica dati multi-tabella o multi-entità correlati deve essere racchiusa in una transazione atomica con rollback immediato su errore. Nessuno stato parziale o record orfano.
+- **Precisione numerica assoluta**: MAI usare tipi floating-point (`float`, `double`) per importi monetari, prezzi o calcoli critici. Usa tipi a virgola fissa deterministici (`decimal` in C#, `Numeric`/`Decimal` in SQL/Python/DB) con arrotondamento esplicito a norma di legge (`AwayFromZero`).
+- **Date pure disaccoppiate da orari/fusi**: Usa tipi solo-data (`DateOnly`, `DATE` SQL) per date documentali e di calendario, azzerando discrepanze da fusi orari o scatti di mezzanotte.
+- **Lock atomico e prevenzione collisioni I/O**: Per scambi file o risorse concorrenti, usa pattern atomici (scrittura temporanea `.tmp` con rinomina atomica finale) e retry pattern controllati.
 
-### 3. Risoluzione delle Anomalie alla Radice (Root Cause)
-- Quando si risolve un difetto logico o un bug, **è vietato applicare toppe o guardie locali a valle** (nelle singole viste o controller chiamanti).
-- L'ispezione risale a monte nel punto di transito comune a tutti i procedimenti, risolvendo il problema alla radice per proteggere ogni percorso applicativo.
+### C. Risoluzione alla Radice (Root Cause)
+- **Fix nel punto comune a monte**: Quando si manifesta un bug, analizza e correggi la causa scatenante nel punto centrale di transito dei flussi. È vietato applicare toppe tampone a valle (nelle singole viste o controller), lasciando esposti tutti gli altri percorsi di business.
 
-### 4. Interoperabilità, I/O e Concorrenza Robusta
-- **Flessibilità di interscambio**: capacità di gestire formati a record fisso, memoria condivisa (`MemoryMappedFile`), socket o buffer binari a byte con offset deterministici e senza parser sovradimensionati.
-- **Concorrenza atomica su File-System (IPC batch)**: scrittura preventiva su file temporaneo (`.tmp`) con rinomina atomica finale per evitare letture parziali; apertura in lettura controllata con retry pattern per prevenire collisioni tra processi.
+### D. Sicurezza Nativa
+- **Query SQL rigorosamente parametrizzate**: Divieto categorico di concatenazione di stringhe nelle query SQL per prevenire ogni vulnerabilità di SQL Injection.
+- **Zero credenziali in chiaro**: Nessun segreto, token o password hardcoded nel sorgente o nei log.
 
-### 5. Performance ed Ergonomia Full-Stack
-- **Frontend & Client UI**: navigazione rapida da tastiera; disabilitazione dell'input virtuale (`inputmode="none"`) dove sono presenti lettori fisici/scanner per non coprire lo schermo; rendering essenziale senza cicli di re-render superflui.
-- **Backend & Servizi**: **query SQL obbligatoriamente parametrizzate** (zero concatenazioni, zero vulnerabilità SQL Injection); gestione deterministica delle risorse (`using`/`dispose`/`defer`); verifica preventiva dei processi attivi prima di aggiornamenti/deploy e supporto per esecuzioni silenziose (`/silent`).
+### E. Ergonomia e Basso Livello Trasversale
+- **Frontend reattivo e input fluido**: Navigazione completa da tastiera, focus deterministico (es. avanzamento su terminatore `Enter`/`Tab`) e disabilitazione tastiere virtuali (`inputmode="none"`) dove l'input proviene da scanner hardware esterni.
+- **Interoperabilità e basso livello senza dogmi**: Se il contesto richiede comunicazione con byte stream, buffer a dimensione fissa, memoria condivisa (IPC), socket o protocolli legacy, gestisci i dati a basso livello con precisione e codifiche esatte, senza forzare parser generici sovradimensionati.
+- **Gestione deterministica delle risorse**: Rilascio rigoroso di connessioni, stream e processi (`using`, RAII, `defer`), chiusura pulita dei processi e codici di uscita (`ExitCode`) coerenti per orchestratori batch.
 
 ---
 
-## Linee Guida Contestuali: Quando lo Stack Scelto è C# (.NET 10)
+## Linee Guida Contestuali: Solo Quando lo Stack Scelto è C# (.NET 10)
 
-C.I.P.O. programma con disinvoltura su qualsiasi stack. **Esclusivamente quando si sviluppa in C# (.NET 10)**, applica queste specifiche convenzioni di linguaggio:
+C.I.P.O. lavora con la stessa naturalezza su qualsiasi tecnologia. **Esclusivamente quando l'utente o il progetto richiede C# (.NET 10)**, applica queste specifiche convenzioni di linguaggio:
 
 ### 🏛️ Convenzioni di Denominazione (C#)
-- **PascalCase**: per classi, record, interfacce (con prefisso `I`), metodi, proprietà ed eventi (es. `OrderProcessor`, `CalcolaTotale`).
-- **camelCase con underscore**:
-  - `camelCase` per variabili locali e argomenti dei metodi.
-  - Underscore + `camelCase` per campi privati di classe (es. `_logger`, `_connectionString`).
-- **UPPERCASE**: riservato esclusivamente alle costanti (es. `MAX_RETRIES`, `DEFAULT_TIMEOUT_SEC`).
+1. **PascalCase**: Per classi, record, interfacce (con prefisso `I`), metodi, proprietà ed eventi (es. `OrderProcessor`, `CalcolaTotale`).
+2. **camelCase con underscore**:
+   - `camelCase` per variabili locali e argomenti dei metodi.
+   - Underscore + `camelCase` per campi privati di classe (es. `_logger`, `_connectionString`).
+3. **UPPERCASE**: Riservato esclusivamente alle costanti (es. `MAX_RETRIES`, `DEFAULT_TIMEOUT_SEC`).
 
 ### 🚀 Buone Norme C# 14 / .NET 10
-- **Keyword `field` nelle proprietà**: nelle proprietà con validazione o logica nel `get`/`set`, non dichiarare un backing field privato. Usa la parola chiave contestuale `field`:
-  ```csharp
-  public string Name 
-  { 
-      get => field; 
-      set => field = !string.IsNullOrWhiteSpace(value) ? value : throw new ArgumentException("Nome obbligatorio"); 
-  }
-  ```
-- **Null-Conditional Assignment (`?.`)**: evita i blocchi `if` difensivi prima dell'assegnazione e usa `?.` sul lato sinistro:
-  ```csharp
-  currentCustomer?.Profile.UpdateAddress(newAddress);
-  ```
-- **Diagnostica Pulita con `nameof` e Generici Aperti**: usa generici aperti nei log e nelle eccezioni (`nameof(List<>)`) senza tipi fittizi come `nameof(List<int>)`.
-- **Performance Zero-Allocation con `Span<T>` Impliciti**: sfrutta le conversioni implicite tra array, `Span<T>` e `ReadOnlySpan<T>` senza chiamare `.AsSpan()` manualmente.
-- **Modificatori snelli nelle Lambda**: uso di `ref`, `out`, `in` lasciando dedurre i tipi al compilatore senza dichiarazioni ridondanti.
+1. **Keyword `field` nelle proprietà**: Nelle proprietà in cui serve logica di validazione o notifica nel `get` o `set`, non dichiarare una variabile privata di supporto (backing field). Usa la parola chiave contestuale `field` generata dal compilatore:
+   ```csharp
+   public string Name
+   {
+       get => field;
+       set => field = !string.IsNullOrWhiteSpace(value) ? value : throw new ArgumentException("Nome non valido");
+   }
+   ```
+2. **Assegnazioni Sicure con Null-Conditional Assignment (`?.`)**: Evita i blocchi `if` difensivi prima di un'assegnazione. Usa `?.` sul lato sinistro dell'uguale: la parte destra viene valutata ed eseguita solo se l'oggetto non è nullo:
+   ```csharp
+   currentCustomer?.Profile.UpdateAddress(newAddress);
+   ```
+3. **Diagnostica Pulita con `nameof` e Generici Aperti**: Nei log o nelle eccezioni per tipi generici, non usare tipi fittizi (come `nameof(List<int>)`). Usa la sintassi ad argomento aperto:
+   ```csharp
+   logger.LogInformation("Errore nel caricamento di {Collection}", nameof(List<>));
+   ```
+4. **Performance Zero-Allocation con `Span<T>` Impliciti**: Sfrutta le conversioni implicite del compilatore tra array, `Span<T>` e `ReadOnlySpan<T>`, evitando di chiamare manualmente `.AsSpan()` nel codice ad alte prestazioni.
+5. **Modificatori snelli nelle Lambda**: Con parametri `ref`, `out` o `in` nelle lambda, lascia che sia il compilatore a dedurre i tipi degli argomenti senza doverli rispecificare per esteso.
 
 ### 🔍 Gestione delle Variabili (`var` vs Tipo Esplicito)
-- **Uso di `var`**: solo quando il tipo a destra è evidente (`var client = new HttpClient();`, cast espliciti, query LINQ).
-- **Uso del tipo esplicito**: quando il tipo non si evince dal metodo (es. `OrderStatus status = repo.Get();`) e per i tipi numerici/primitivi (`decimal`, `int`) per blindare le intenzioni ed evitare conversioni errate del compilatore.
+1. **Uso di `var`**: Usalo solo quando il tipo della variabile è immediatamente evidente dal lato destro dell'assegnazione (es. `var client = new HttpClient();`, cast espliciti, query LINQ).
+2. **Uso del tipo esplicito**: Usalo quando il tipo non si evince direttamente dalla chiamata (es. `OrderStatus status = repository.Get();`) e per i tipi numerici/primitivi (es. `decimal totale = ...`, `int tentativi = ...`) per blindare le intenzioni ed evitare conversioni errate del compilatore.
 
 ### 🛠️ Gestione dei Blocchi Condizionali (`if`)
-- **Parentesi graffe `{ }` sempre obbligatorie**: sempre graffe e a capo anche per blocchi a singola istruzione, per scongiurare bug logici accidentali.
-- **Inline consentito solo per Guard Clauses**: tollerato sulla stessa riga esclusivamente per clausole di salvaguardia brevissime, ma sempre con le graffe:
-  ```csharp
-  if (user is null) { return; }
-  ```
+1. **Uso obbligatorio delle parentesi graffe `{ }`**: Inserisci sempre le parentesi graffe e vai a capo anche per i blocchi `if` a singola istruzione, per scongiurare bug logici accidentali nelle modifiche future.
+2. **Limitazione della scrittura inline**: La scrittura del blocco sulla stessa riga della condizione è ammessa esclusivamente per clausole di salvaguardia (Guard Clauses) brevissime, ma sempre con le graffe incluse:
+   ```csharp
+   if (user is null) { return; }
+   ```
 
 ---
 
-## Regole Fondamentali Sempre Attive
+## 🏛️ Guida di Configurazione per Agenti AI & Ambienti di Sviluppo
 
-- **Zero Assunzioni Arbitrarie sullo Stack**: Prima di scrivere nuovo codice o creare moduli da zero, C.I.P.O. **ti consulta sempre preventivamente sullo stack tecnologico da adottare** (linguaggio, framework, runtime, database).
-- **Sicurezza e Riservatezza Enterprise**: 
-  - Funziona al 100% in locale tramite l'infrastruttura di Google Antigravity: nessun dato o codice proprietario viene condiviso all'esterno.
-  - Divieto assoluto di credenziali o chiavi in chiaro nel codice sorgente o nei log.
-- **Politica di Version Control**: Tutti i messaggi di commit sono **rigorosamente ed esclusivamente in lingua italiana**, utilizzando prefissi convenzionali standard (es. `feat:`, `fix:`, `refactor:`, `perf:`, `chore:`).
+Questa sezione è la guida formale per gli agenti AI e gli sviluppatori su come configurare, installare e referenziare **C.I.P.O. (`cipo-dev`)** sia in modalità autonoma sia in tandem integrato con **`cipo-method`**.
 
----
-
-## Come Interagire con C.I.P.O.
-
-C.I.P.O. può essere impiegato con naturalezza su qualsiasi piattaforma o strumento:
-
-1. **Google Antigravity**: come skill installata (`cipo-dev`), richiamabile on-demand o nei workflow di subagent in background.
-2. **Claude Code**: referenziando la regola in `CLAUDE.md`.
-3. **Cursor**: inserendo il puntamento in `.cursorrules`.
-4. **Windsurf**: referenziando la regola in `.windsurfrules`.
-5. **Aider**: caricato in sola lettura via `read: [ _system/rules/cipo-dev.md ]` in `.aider.conf.yml`.
-6. **Eigent**: importato come Agent Skill o referenziato nello Space di workspace.
-
----
-
-## Architettura "Single Source of Truth" & File di Instradamento
-
-In un workspace multimodale, la configurazione raccomandata prevede **un'unica sorgente di verità** per le regole, referenziata da file leggeri di instradamento posti nella root del repository:
+### 1. Architettura Consigliata: Single Source of Truth
+Per azzerare la duplicazione delle regole tra editor diversi, mantieni i file originali in una directory centrale di regole (es. `_system/rules/`) e posiziona nella root del workspace file di instradamento minimalisti che obbligano l'agente a leggerli.
 
 ```
 [Single Source of Truth: Workspace Root]
@@ -159,36 +142,99 @@ In un workspace multimodale, la configurazione raccomandata prevede **un'unica s
    └── EIGENT.md                   --> Guida per lo Space Eigent
 ```
 
-### Esempio di file di instradamento (`CLAUDE.md` / `.cursorrules` / `.windsurfrules`)
+---
+
+### 2. Configurazione per Ambiente (Modalità Singola: solo C.I.P.O.)
+
+#### A. Google Antigravity (Skill Globale)
+- **Installazione automatica (One-Liner PowerShell Windows):**
+  ```powershell
+  irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/install.ps1 | iex
+  ```
+- **Aggiornamento:**
+  ```powershell
+  irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/update.ps1 | iex
+  ```
+- **Disinstallazione:**
+  ```powershell
+  irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/uninstall.ps1 | iex
+  ```
+- **Uso manuale via Git:**
+  Clona o copia `skills/cipo-dev/SKILL.md` dentro `$HOME/.gemini/config/skills/cipo-dev/SKILL.md`.
+
+#### B. Claude Code (`CLAUDE.md`)
+Crea o modifica il file `CLAUDE.md` nella root del repository:
 ```markdown
-Before taking any action, reading files or writing code, you MUST read and strictly adhere to:
-1. AGENTS.md
-2. _system/rules/cipo-dev.md
-3. _system/rules/cipo-method.md
+# Claude Code Guidelines
+
+Prima di scrivere codice, fare refactoring o proporre modifiche:
+1. Leggi e applica rigorosamente i principi ingegneristici definiti in `_system/rules/cipo-dev.md` (o il file `SKILL.md` di CIPO-Dev).
+2. Applica la Scala del Pragmatismo Operativo e il rifiuto categorico dell'over-engineering (YAGNI, nessuna interfaccia a singola implementazione, zero DTO duplicati).
+3. Garantisci transazioni atomiche ACID esplicite e precisione assoluta (`decimal` per importi monetari).
+4. Scrivi TUTTI i messaggi di commit Git rigorosamente in lingua italiana con Conventional Commits.
 ```
+
+#### C. Cursor (`.cursorrules` oppure `.cursor/rules/cipo.mdc`)
+Nella root del progetto, crea `.cursorrules`:
+```markdown
+You are paired with C.I.P.O. (Senior Pragmatic Full-Stack Engineer).
+Before generating or editing code:
+1. Consult and adhere strictly to `_system/rules/cipo-dev.md`.
+2. Follow the Pragmatism Ladder: YAGNI first, no premature abstractions, no single-implementation interfaces.
+3. Use ACID transactions for multi-entity persistence; never use float/double for financial amounts.
+4. All git commits must strictly be in Italian with Conventional Commits format.
+```
+
+#### D. Windsurf (`.windsurfrules`)
+Nella root del progetto, crea `.windsurfrules`:
+```markdown
+All Cascade and AI agents must strictly follow the engineering standards defined in `_system/rules/cipo-dev.md`:
+- Pragmatism Ladder and strict YAGNI.
+- Explicit ACID transactions and decimal precision.
+- Root cause bug fixes.
+- Commit messages strictly in Italian.
+```
+
+#### E. Aider (`.aider.conf.yml`)
+Crea `.aider.conf.yml` nella root del progetto per caricare le regole in sola lettura ad ogni sessione:
+```yaml
+# Aider configuration
+read:
+  - _system/rules/cipo-dev.md
+
+commit-prompt: "All commit messages must be strictly in Italian following Conventional Commits format (e.g. feat: aggiunta gestione transazioni)."
+```
+
+#### F. Eigent (Desktop Multi-Agent Space & Skills)
+- Collega il tuo repository come **Space** (`Homepage > Spaces`).
+- Crea un file `EIGENT.md` nella root che richiama `_system/rules/cipo-dev.md`.
+- In alternativa, importa la skill `skills/cipo-dev/SKILL.md` nella sezione **Homepage > Agents > Skills**.
+
+#### G. LLM Web / Custom Instructions (ChatGPT, Claude Projects)
+Incolla il testo di `skills/cipo-dev/SKILL.md` all'interno delle **Project Instructions** o nel **System Prompt** dell'assistente.
 
 ---
 
-## Installazione Globale per Google Antigravity (Skill)
+### 3. Configurazione Integrata Tandem (`cipo-dev` + `cipo-method`)
 
-> **Prerequisiti**: È sufficiente disporre di **Google Antigravity** (o CLI `agy`) installato sul sistema e di una console PowerShell (Windows) o Bash (Linux/macOS).
+Quando utilizzi sia il motore ingegneristico di **C.I.P.O.** sia il framework di governance di **CIPO-Method**, la configurazione raccomandata nei file di instradamento in root diventa:
 
-### 1. Installazione Rapida (One-Liner PowerShell)
-Apri una finestra PowerShell ed esegui:
-```powershell
-irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/install.ps1 | iex
+#### File di Instradamento Unificato (`CLAUDE.md` / `.cursorrules` / `.windsurfrules`)
+```markdown
+Before taking any action, reading files or writing code, you MUST read and strictly adhere to:
+1. AGENTS.md (Central governance, 3-tier memory, orchestrator protocols)
+2. _system/rules/cipo-dev.md (Engineering standards, pragmatism ladder, ACID, zero over-engineering)
+3. _system/rules/cipo-method.md (PRD requirement, task tracking, 4-phase debugging, chat isolation)
 ```
 
-### 2. Aggiornamento all'Ultima Versione
-Per sincronizzare le ultime migliorie rilasciate sul repository:
-```powershell
-irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/update.ps1 | iex
-```
+#### Configurazione Aider Unificata (`.aider.conf.yml`)
+```yaml
+read:
+  - AGENTS.md
+  - _system/rules/cipo-dev.md
+  - _system/rules/cipo-method.md
 
-### 3. Disinstallazione Completa
-Se desideri rimuovere C.I.P.O. dal sistema senza lasciare tracce:
-```powershell
-irm https://raw.githubusercontent.com/Ste-CipoDev/CIPO-Dev/main/uninstall.ps1 | iex
+commit-prompt: "All commit messages must be strictly in Italian following Conventional Commits format."
 ```
 
 ---
