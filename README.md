@@ -12,6 +12,21 @@
 
 ---
 
+> ### 🤖 Istruzioni Rapide per l'Agente AI (Self-Setup Automatico)
+> Se sei un assistente o agente AI (Cursor, Claude Code, Windsurf, Aider, Eigent o Antigravity) e l'utente ti ha chiesto di configurare o installare questo repository nel workspace:
+> 1. **Identifica il tuo runtime**: riconosci in quale ambiente stai operando (Cursor, Claude Code, Windsurf, Aider o Antigravity).
+> 2. **Salta direttamente alla guida operativa**: vai alla sezione in fondo [Guida di Configurazione per Agenti AI & Ambienti di Sviluppo](#️-guida-di-configurazione-per-agenti-ai--ambienti-di-sviluppo).
+> 3. **Esegui l'integrazione per il tuo ambiente**:
+>    - **Cursor**: genera/integra `.cursorrules` (oppure `.cursor/rules/cipo.mdc`).
+>    - **Claude Code**: genera/integra `CLAUDE.md`.
+>    - **Windsurf**: genera/integra `.windsurfrules`.
+>    - **Aider**: configura `read:` in `.aider.conf.yml`.
+>    - **Eigent**: collega lo Space e richiama `skills/cipo-dev/SKILL.md`.
+>    - **Antigravity**: esegui `install.ps1` per registrare la skill globale.
+> 4. **Verifica l'integrazione**: conferma all'utente di aver applicato la Scala del Pragmatismo Operativo e i pilastri ingegneristici non negoziabili.
+
+---
+
 ## Proclama di C.I.P.O.
 
 **C.I.P.O. sono io**: il distillato della mia esperienza e del mio modo reale di fare software, tradotto in principi operativi direttamente interpretabili da **qualsiasi assistente o agente AI di coding** (Google Antigravity, Claude Code, Cursor, Windsurf, Aider, Eigent e assistenti LLM conversazionali).
